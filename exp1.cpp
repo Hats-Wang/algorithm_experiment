@@ -25,10 +25,9 @@ int main (){
   for (long i = 0 ;i < number_of_array ; i++ )
     std::cin>>weight[i];
 
-  std::cout<<"vafdsvsaezeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 while(1){
 mid_element =  linear_find_mid(element, weight, start, end);
-position = partitions(element, weight, 0, number_of_array);
+position = partitions(element, weight, 0, number_of_array - 1);
 int chk = check(weight, position, number_of_array);
 
 if (!chk) break;
@@ -40,9 +39,9 @@ std::cout<<element[position]<<std::endl;
 
 //find the n/2th largest element and return element
 long linear_find_mid(long *arr, double *weight, long start, long end){
-if (start == end) return *(arr + end);
+//if (start == end) return *(arr + end);
 if (end - start +1 <= 5){
-long mid = (end - start + 1)/2;
+long mid = (end + start)/2;
   buble(arr, weight, start, end);
   // The n/2th largest number is in the first place
   swap_long(arr, 0, mid);
@@ -53,9 +52,9 @@ long mid = (end - start + 1)/2;
 long loop_times = (end -start + 1)/5;
 long i;
 for ( i = 0; i < loop_times; i++){
-buble(arr, weight, 5*i, 5*i + 4);
-swap_long(arr, i, 5*i + 2);
-swap_double(weight, i, 5*i + 2);
+buble(arr, weight, 5*i + start ,  start + 5*i + 4);
+swap_long(arr, i, start + 5*i + 2 );
+swap_double(weight, i, 5*i + 2 + start );
 }
 return linear_find_mid(arr, weight, long(0), loop_times-1);
 }
@@ -123,4 +122,3 @@ void swap_long (long *arr, long element1, long element2){
             }
           }
   }
-

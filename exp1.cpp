@@ -1,15 +1,14 @@
 #include <iostream>
-//#include <algorithm>
 
 void swap_long (long *arr, long element1, long element2);
 void swap_double (double *arr, long element1, long element2);
 void buble(long *arr, double *weight, long start, long end);
 long linear_find_mid(long *arr, double *weight, long start, long end);
-long partitions(long *arr, double *weight, long  start, long end);
+long partitions(long *arr, double *weight, long  start, long end, long index_of_pivot);
 int check(double *weight, long position, long end);
 
 int main (){
-  long number_of_array, mid_element, position, start , end;
+  long number_of_array, mid_element, position, start , end, index_mid_element;
   std::cout<<"please input the number of array"<<std::endl;
   std::cin>>number_of_array;
   start =0;
@@ -26,8 +25,8 @@ int main (){
     std::cin>>weight[i];
 
 while(1){
-mid_element =  linear_find_mid(element, weight, start, end);
-position = partitions(element, weight, 0, number_of_array - 1);
+index_mid_element = linear_find_mid(element, weight, start, end);
+position = partitions(element, weight, start, end, index_mid_element);
 int chk = check(weight, position, number_of_array);
 
 if (!chk) break;
@@ -39,50 +38,40 @@ std::cout<<element[position]<<std::endl;
 
 //find the n/2th largest element and return element
 long linear_find_mid(long *arr, double *weight, long start, long end){
-//if (start == end) return *(arr + end);
 if (end - start +1 <= 5){
 long mid = (end + start)/2;
   buble(arr, weight, start, end);
   // The n/2th largest number is in the first place
-  swap_long(arr, 0, mid);
-  swap_double(weight, 0, mid);
-  return arr[0];
+  return mid;
   }
 
 long loop_times = (end -start + 1)/5;
 long i;
 for ( i = 0; i < loop_times; i++){
 buble(arr, weight, 5*i + start ,  start + 5*i + 4);
-swap_long(arr, i, start + 5*i + 2 );
-swap_double(weight, i, 5*i + 2 + start );
+swap_long(arr, i+start, start + 5*i + 2 );
+swap_double(weight, start+i, 5*i + 2 + start );
 }
-return linear_find_mid(arr, weight, long(0), loop_times-1);
+return linear_find_mid(arr, weight, start, start+loop_times-1);
 }
 
 
-long partitions(long *arr, double *weight, long  start, long end){
-long standard = *(arr);
-double weight_of_standard = *(weight); 
-while(start<end){
-  while((start<end) && arr[end]>standard) end--;
-  if (start <end){
-     *(arr+start)=*(arr+end);
-     *(weight+start)=*(weight+end);
-//	  swap_long(arr, start, end);
-//  swap_double(weight, start, end);
+long partitions(long *arr, double *weight, long  start, long end, long index_of_pivot){
+long pivot = *(arr+index_of_pivot);
+double weight_of_standard = *(weight+index_of_pivot); 
+swap_long(arr, index_of_pivot, end);
+swap_double(weight, index_of_pivot, end);
+
+long pos = start;
+while(start<=end){
+if (arr[start]<=pivot){
+  swap_long(arr, pos, start);
+  swap_double(weight, pos, start);
+  pos++;
   }
-  while((start<end) && arr[start]<=standard) start++;
-  
-  if (start <end){ 
-    *(arr+end)=*(arr+start);
-    *(weight+end)=*(weight+start);
-//  swap_long(arr, start, end);
-//  swap_double(weight, start, end);
-  }
-}
-*(arr+end)=standard;
-*(weight+end)=weight_of_standard;
-return end;
+start++;
+ }
+return pos-1;
 }
 
 int check(double *weight, long position, long end){
@@ -122,3 +111,4 @@ void swap_long (long *arr, long element1, long element2){
             }
           }
   }
+

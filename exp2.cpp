@@ -1,10 +1,15 @@
+#include<stdio.h>
 #include<iostream>
 #include<algorithm>
 #include<cstring>
 #include<limits.h>
+#include <iomanip>
 
 int main (){
 	int total_length, num, left, right, mid;
+	freopen("exp2_in.txt", "r", stdin);
+	int time = 10;
+	while ( time-- > 0){
 	std::cin>> total_length >> num;
         // the absolute distance of each point from 0 to last.
 	int  abs_distance[num + 2];
@@ -29,4 +34,5 @@ int main (){
 		}
 	}
 	std::cout<< ans[0][num +1] << std::endl;
+}
 }
